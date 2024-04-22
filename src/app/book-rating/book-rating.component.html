@@ -1,12 +1,31 @@
-<div *ngIf="currentBook">
-  <h2>{{ currentBook.title }}</h2>
-  <p>{{ currentBook.description }}</p>
-  <p>Authors: {{ currentBook.authors.join(", ") }}</p>
-  <p>Average Rating: {{ averageRating | number : "1.1-1" }}</p>
-  <div>
+<div *ngIf="!finished && currentBook" class="book-container">
+  <h2 class="book-title">{{ currentBook.title }}</h2>
+  <p class="book-description">{{ currentBook.description }}</p>
+  <p class="book-authors">Authors: {{ currentBook.authors.join(", ") }}</p>
+  <p class="book-rating">
+    Average Rating: {{ averageRating | number : "1.1-1" }}
+  </p>
+  <div class="rating-buttons">
     Rate:
-    <button *ngFor="let num of [1, 2, 3, 4, 5]" (click)="rate(num)">
+    <button
+      *ngFor="let num of [1, 2, 3, 4, 5]"
+      (click)="rate(num)"
+      class="rate-button"
+    >
       {{ num }}
     </button>
   </div>
+</div>
+
+<div *ngIf="finished" class="finish-container">
+  <h3 class="finish-heading">Rating complete. What would you like to do?</h3>
+  <button (click)="restartRating()" class="action-button restart">
+    Start Over
+  </button>
+  <button (click)="completeRating()" class="action-button finish">
+    Finish
+  </button>
+  <p *ngIf="finished && !currentBook" class="success-message">
+    The job was done successfully.
+  </p>
 </div>

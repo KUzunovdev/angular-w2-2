@@ -12,20 +12,39 @@ import { CommonModule } from '@angular/common';
 })
 export class BookRatingComponent {
 
-  currentBook!: Book;
+  currentBook!: Book | null;
   averageRating!: number;
+  finished: boolean = false;
 
   constructor(private bookService: BookService) {
     this.loadBook();
   }
 
   loadBook(): void {
-    this.currentBook = this.bookService.getBook();
-    this.averageRating = this.bookService.calculateAverage(this.currentBook);
+    this.currentBook = this.bookService.getBook()!;
+    if (this.currentBook) {
+      this.averageRating = this.bookService.calculateAverage(this.currentBook);
+    } else {
+      this.finished = true;
+    }
   }
-
   rate(rating: number): void {
     this.bookService.addRating(rating);
+    if (!this.bookService.isFinished()) {
+      this.loadBook();  
+    } else {
+      this.finished = true;  
+    }
+  }
+
+  restartRating(): void {
+    this.bookService.resetBooks();
+    this.finished = false;
     this.loadBook();
+  }
+
+  completeRating(): void {
+    this.finished = true;
+    this.currentBook = null;
   }
 }

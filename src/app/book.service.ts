@@ -45,20 +45,35 @@ export class BookService {
 
   currentBookIndex = 0;
 
-  constructor() {}
+  hasFinished = false;
 
-  getBook(): Book {
-    return this.books[this.currentBookIndex];
+  getBook(): Book | null {
+    if (this.currentBookIndex < this.books.length) {
+      return this.books[this.currentBookIndex];
+    } else {
+      return null;  
+    }
   }
 
   addRating(rating: number): void {
-    let book = this.books[this.currentBookIndex];
-    book.ratings.push(rating);
-    this.currentBookIndex = (this.currentBookIndex + 1) % this.books.length;
+    if (this.currentBookIndex < this.books.length) {
+      let book = this.books[this.currentBookIndex];
+      book.ratings.push(rating);
+    }
+    this.currentBookIndex++;  
+  }
+
+  resetBooks(): void {
+    this.currentBookIndex = 0;
+    this.hasFinished = false;
   }
 
   calculateAverage(book: Book): number {
     const sum = book.ratings.reduce((a, b) => a + b, 0);
     return book.ratings.length ? sum / book.ratings.length : 0;
+  }
+
+  isFinished(): boolean {
+    return this.currentBookIndex >= this.books.length;  
   }
 }
