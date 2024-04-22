@@ -1,0 +1,12 @@
+<div *ngIf="currentBook">
+  <h2>{{ currentBook.title }}</h2>
+  <p>{{ currentBook.description }}</p>
+  <p>Authors: {{ currentBook.authors.join(", ") }}</p>
+  <p>Average Rating: {{ averageRating | number : "1.1-1" }}</p>
+  <div>
+    Rate:
+    <button *ngFor="let num of [1, 2, 3, 4, 5]" (click)="rate(num)">
+      {{ num }}
+    </button>
+  </div>
+</div>
