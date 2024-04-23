@@ -1,7 +1,23 @@
 <div *ngIf="!finished && currentBook" class="book-container">
-  <h2 class="book-title">{{ currentBook.title }}</h2>
-  <p class="book-description">{{ currentBook.description }}</p>
-  <p class="book-authors">Authors: {{ currentBook.authors.join(", ") }}</p>
+  <input
+    [(ngModel)]="editTitle"
+    class="edit-field title-input"
+    placeholder="Edit Title"
+  />
+  <textarea
+    [(ngModel)]="editDescription"
+    class="edit-field description-input"
+    placeholder="Edit Description"
+  ></textarea>
+  <input
+    [(ngModel)]="editAuthors"
+    class="edit-field authors-input"
+    placeholder="Edit Authors (comma-separated)"
+  />
+
+  <h2 class="book-title">{{ editTitle }}</h2>
+  <p class="book-description">{{ editDescription }}</p>
+  <p class="book-authors">Authors: {{ editAuthors }}</p>
   <p class="book-rating">
     Average Rating: {{ averageRating | number : "1.1-1" }}
   </p>

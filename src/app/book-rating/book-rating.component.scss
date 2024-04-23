@@ -61,4 +61,20 @@
     font-size: 18px;
     margin-top: 20px;
   }
+
+  .edit-field {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .title-input, .authors-input {
+    font-size: 18px;  // Larger font for title and authors for better visibility
+  }
+  
+  .description-input {
+    height: 100px;  // Enough space for description text
+  }
   

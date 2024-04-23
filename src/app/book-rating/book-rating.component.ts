@@ -2,17 +2,21 @@ import { Component } from '@angular/core';
 import { Book } from '../book';
 import { BookService } from '../book.service';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-book-rating',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './book-rating.component.html',
   styleUrl: './book-rating.component.scss'
 })
 export class BookRatingComponent {
 
   currentBook!: Book | null;
+  editTitle!: string;
+  editDescription!: string;
+  editAuthors!: string;
   averageRating!: number;
   finished: boolean = false;
 
@@ -21,14 +25,20 @@ export class BookRatingComponent {
   }
 
   loadBook(): void {
-    this.currentBook = this.bookService.getBook()!;
+    this.currentBook = this.bookService.getBook();
     if (this.currentBook) {
-      this.averageRating = this.bookService.calculateAverage(this.currentBook);
-    } else {
-      this.finished = true;
+      this.editTitle = this.currentBook.title;
+      this.editDescription = this.currentBook.description;
+      this.editAuthors = this.currentBook.authors.join(', ');
     }
   }
+
   rate(rating: number): void {
+    this.bookService.setPendingChanges({
+      title: this.editTitle,
+      description: this.editDescription,
+      authors: this.editAuthors.split(',').map(author => author.trim())
+    });
     this.bookService.addRating(rating);
     if (!this.bookService.isFinished()) {
       this.loadBook();  
@@ -36,6 +46,7 @@ export class BookRatingComponent {
       this.finished = true;  
     }
   }
+
 
   restartRating(): void {
     this.bookService.resetBooks();

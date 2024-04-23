@@ -47,6 +47,8 @@ export class BookService {
 
   hasFinished = false;
 
+  private pendingChanges: Partial<Book> | null = null;
+
   getBook(): Book | null {
     if (this.currentBookIndex < this.books.length) {
       return this.books[this.currentBookIndex];
@@ -59,9 +61,23 @@ export class BookService {
     if (this.currentBookIndex < this.books.length) {
       let book = this.books[this.currentBookIndex];
       book.ratings.push(rating);
+
+      
+      if (this.pendingChanges) {
+        if (typeof this.pendingChanges.title !== 'undefined') book.title = this.pendingChanges.title;
+        if (typeof this.pendingChanges.description !== 'undefined') book.description = this.pendingChanges.description;
+        if (typeof this.pendingChanges.authors !== 'undefined') book.authors = this.pendingChanges.authors;
+        this.pendingChanges = null; 
+      }
+
+      this.currentBookIndex++;
     }
-    this.currentBookIndex++;  
   }
+
+  setPendingChanges(changes: Partial<Book>): void {
+    this.pendingChanges = changes;
+  }
+
 
   resetBooks(): void {
     this.currentBookIndex = 0;
